@@ -26,6 +26,8 @@ require 'rubygems'
 require 'geo_ruby'
 require 'georuby-extras'
 
+include GeoRuby::SimpleFeatures
+  
 @home = Point.from_lon_lat(-76.511,39.024)
 @nyc = Point.from_lon_lat(-74,40.6)
 
