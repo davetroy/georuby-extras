@@ -33,22 +33,25 @@
 
 static VALUE rb_mVicenty;
 
-static VALUE distance(VALUE self, VALUE rb_lon1, VALUE rb_lat1, VALUE rb_lon2, VALUE rb_lat2) {
+static VALUE distance(VALUE self, VALUE rb_lon1, VALUE rb_lat1, VALUE rb_lon2, VALUE rb_lat2, VALUE rb_a, VALUE rb_b) {
 
 	Check_Type(rb_lon1, T_FLOAT);
 	Check_Type(rb_lat1, T_FLOAT);
 	Check_Type(rb_lon2, T_FLOAT);
 	Check_Type(rb_lat2, T_FLOAT);
+	Check_Type(rb_a, T_FLOAT);
+	Check_Type(rb_b, T_FLOAT);
 
 	double lon1 = RFLOAT(rb_lon1)->value;
 	double lat1 = RFLOAT(rb_lat1)->value;
 	double lon2 = RFLOAT(rb_lon2)->value;
 	double lat2 = RFLOAT(rb_lat2)->value;
+	double a = RFLOAT(rb_a)->value;
+	double b = RFLOAT(rb_b)->value;
 
 	double sinLambda, cosLambda, sinSigma, cosSigma, sigma, sinAlpha, cosSqAlpha, cos2SigmaM, C;
 	
-	double a = 6378137.0;
-	double b = 6356752.3142, f = (a-b) / a;  // WGS-84 ellipsoid  (f = 1.0/298.257223563;)
+	double f = (a-b) / a;
   double L = (lon2-lon1) * DEG_TO_RAD;
   double U1 = atan((1-f) * tan(lat1 * DEG_TO_RAD));
   double U2 = atan((1-f) * tan(lat2 * DEG_TO_RAD));
@@ -83,20 +86,24 @@ static VALUE distance(VALUE self, VALUE rb_lon1, VALUE rb_lat1, VALUE rb_lon2, V
 	return rb_float_new(s);
 }
 
-static VALUE point_from_lon_lat(VALUE self, VALUE rb_lon1, VALUE rb_lat1, VALUE rb_bearing, VALUE rb_distance) {
+static VALUE point_from_lon_lat(VALUE self, VALUE rb_lon1, VALUE rb_lat1, VALUE rb_bearing, VALUE rb_distance, VALUE rb_a, VALUE rb_b) {
 	Check_Type(rb_lon1, T_FLOAT);
 	Check_Type(rb_lat1, T_FLOAT);
 	Check_Type(rb_bearing, T_FLOAT);
 	Check_Type(rb_distance, T_FLOAT);
-
+	Check_Type(rb_a, T_FLOAT);
+	Check_Type(rb_b, T_FLOAT);
+	
 	VALUE ret;
 
 	double lon1 = RFLOAT(rb_lon1)->value;
 	double lat1 = RFLOAT(rb_lat1)->value;
 	double brng = RFLOAT(rb_bearing)->value;
 	double s = RFLOAT(rb_distance)->value;
+	double a = RFLOAT(rb_a)->value;
+	double b = RFLOAT(rb_b)->value;
 	
-	double a = 6378137.0, b = 6356752.3142,  f = 1/298.257223563;  // WGS-84 ellipsiod
+	double f = (a-b) / a;
   double alpha1 = brng * DEG_TO_RAD;
   double sinAlpha1 = sin(alpha1), cosAlpha1 = cos(alpha1);
   
@@ -138,8 +145,8 @@ static VALUE point_from_lon_lat(VALUE self, VALUE rb_lon1, VALUE rb_lat1, VALUE 
 void Init_vicenty()
 {
 	rb_mVicenty = rb_define_module("Vicenty");
-	rb_define_method(rb_mVicenty, "distance", distance, 4);
-	rb_define_method(rb_mVicenty, "point_from_lon_lat", point_from_lon_lat, 4);
+	rb_define_method(rb_mVicenty, "distance", distance, 6);
+	rb_define_method(rb_mVicenty, "point_from_lon_lat", point_from_lon_lat, 6);
 }
 
 // end
