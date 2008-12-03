@@ -1,3 +1,3 @@
 require 'mkmf'
-dir_config("vicenty")
-create_makefile("vicenty")
+dir_config("vincenty")
+create_makefile("vincenty")

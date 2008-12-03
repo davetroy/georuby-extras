@@ -1,0 +1,73 @@
+= georuby-extras
+
+* http://github.com/davetroy/georuby-extras
+
+== DESCRIPTION:
+
+GeoRuby-Extras Gem for Ruby (c) 2008 David Troy
+dave@roundhousetech.com
+
+GeoRuby offers OGC-compliant simple features for Ruby as well as the ability to
+process SHP files and do other cool GIS hacks.  GeoRuby is often used in conjunction
+with GIS extensions to databases.
+
+== FEATURES/PROBLEMS:
+
+* Provides native C implementation of Vincenty distance and direct algorithms.
+* 25 times faster than GeoRuby 'ellipsoidal_distance' function.
+* Adds the Vincenty 'direct' algorithm (point_at_bearing_and_distance).
+* No known problems; won't work with JRuby or non-MRI Ruby implementations.
+
+== SYNOPSIS:
+
+require 'rubygems'
+require 'geo_ruby'
+require 'georuby-extras'
+
+@home = Point.from_lon_lat(-76.511,39.024)
+@nyc = Point.from_lon_lat(-74,40.6)
+
+>> @home.ellipsoidal_distance(@nyc)
+=> 277195.510448391
+
+>> @home.point_at_bearing_and_distance(91.0, 130000.0).kml_representation
+=> "<Point>\n<coordinates>-75.0105920700835,38.9939120193168</coordinates>\n</Point>\n"
+
+== REQUIREMENTS:
+
+* GCC and a Gnu-ish build environment (for native extensions)
+
+== INSTALLATION
+
+1) Enable gems from github, if you haven't already done so (rubygems >= 1.2):
+    > sudo gem sources -a http://gems.github.com
+
+2) Install gem
+    > sudo gem install davetroy-georuby-extras
+
+3) Profit!
+
+== LICENSE:
+
+(The MIT License)
+
+Copyright (c) 2008 David Troy, Roundhouse Technologies LLC
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

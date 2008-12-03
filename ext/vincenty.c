@@ -2,11 +2,11 @@
 // (c) 2008 David Troy
 // dave@roundhousetech.com
 //
-// Based on code by Chris Veness
+// Based on Javascript code (c) by Chris Veness
 // http://www.movable-type.co.uk/scripts/latlong-vincenty.html
 // http://www.movable-type.co.uk/scripts/latlong-vincenty-direct.html
 // 
-// Derived from algorithms by T. Vicenty, 1975
+// Derived from algorithms by T. Vincenty, 1975
 //
 // (The MIT License)
 // 
@@ -36,8 +36,9 @@
 #include <ctype.h>
 
 #define DEG_TO_RAD	0.0174532925199433
+#define PI					3.14159265358979
 
-static VALUE rb_mVicenty;
+static VALUE rb_mVincenty;
 
 static VALUE distance(VALUE self, VALUE rb_lon1, VALUE rb_lat1, VALUE rb_lon2, VALUE rb_lat2, VALUE rb_a, VALUE rb_b) {
 
@@ -64,7 +65,8 @@ static VALUE distance(VALUE self, VALUE rb_lon1, VALUE rb_lat1, VALUE rb_lon2, V
 	double sinU1 = sin(U1), cosU1 = cos(U1);
   double sinU2 = sin(U2), cosU2 = cos(U2);
 
-  double lambda = L, lambdaP=2*3.14159, iterLimit = 20;
+	int iterLimit = 20;
+  double lambda = L, lambdaP=2*PI;
   while ((fabs(lambda-lambdaP) > 1e-12 && --iterLimit>0)) {
 		sinLambda = sin(lambda); cosLambda = cos(lambda);
     sinSigma = sqrt((cosU2*sinLambda) * (cosU2*sinLambda) + (cosU1*sinU2-sinU1*cosU2*cosLambda) * (cosU1*sinU2-sinU1*cosU2*cosLambda));
@@ -85,8 +87,9 @@ static VALUE distance(VALUE self, VALUE rb_lon1, VALUE rb_lat1, VALUE rb_lon2, V
   double uSq = cosSqAlpha * (a*a - b*b) / (b*b);
   double A = 1 + uSq/16384.0*(4096+uSq*(-768+uSq*(320-175*uSq)));
   double B = uSq/1024 * (256+uSq*(-128+uSq*(74-47*uSq)));
-  double deltaSigma = (B*sinSigma*(cos2SigmaM+B/4*(cosSigma*(-1+2*cos2SigmaM*cos2SigmaM)) -
-    (B/6*cos2SigmaM*(-3+4*sinSigma*sinSigma)*(-3+4*cos2SigmaM*cos2SigmaM))));
+  double deltaSigma = B*sinSigma*(cos2SigmaM+B/4*(cosSigma*(-1+2*cos2SigmaM*cos2SigmaM) -
+    B/6*cos2SigmaM*(-3+4*sinSigma*sinSigma)*(-3+4*cos2SigmaM*cos2SigmaM)));
+
 	double s = b*A*(sigma-deltaSigma);
 	
 	return rb_float_new(s);
@@ -122,7 +125,7 @@ static VALUE point_from_lon_lat(VALUE self, VALUE rb_lon1, VALUE rb_lat1, VALUE 
   double A = 1 + uSq/16384*(4096+uSq*(-768+uSq*(320-175*uSq)));
   double B = uSq/1024 * (256+uSq*(-128+uSq*(74-47*uSq)));
   
-  double sigma = s / (b*A), sigmaP = 2*3.141592658;
+  double sigma = s / (b*A), sigmaP = 2*PI;
 	double cos2SigmaM, sinSigma, deltaSigma, cosSigma;
   while (fabs(sigma-sigmaP) > 1e-12) {
     cos2SigmaM = cos(2*sigma1 + sigma);
@@ -148,11 +151,11 @@ static VALUE point_from_lon_lat(VALUE self, VALUE rb_lon1, VALUE rb_lat1, VALUE 
 	return ret;
 }
 
-void Init_vicenty()
+void Init_vincenty()
 {
-	rb_mVicenty = rb_define_module("Vicenty");
-	rb_define_module_function(rb_mVicenty, "distance", distance, 6);
-	rb_define_module_function(rb_mVicenty, "point_from_lon_lat", point_from_lon_lat, 6);
+	rb_mVincenty = rb_define_module("Vincenty");
+	rb_define_module_function(rb_mVincenty, "distance", distance, 6);
+	rb_define_module_function(rb_mVincenty, "point_from_lon_lat", point_from_lon_lat, 6);
 }
 
 // end
