@@ -1,7 +1,13 @@
 // geohash-native.c
 // (c) 2008 David Troy
 // dave@roundhousetech.com
+//
+// Based on code by Chris Veness
+// http://www.movable-type.co.uk/scripts/latlong-vincenty.html
+// http://www.movable-type.co.uk/scripts/latlong-vincenty-direct.html
 // 
+// Derived from algorithms by T. Vicenty, 1975
+//
 // (The MIT License)
 // 
 // Copyright (c) 2008 David Troy, Roundhouse Technologies LLC
@@ -145,8 +151,8 @@ static VALUE point_from_lon_lat(VALUE self, VALUE rb_lon1, VALUE rb_lat1, VALUE 
 void Init_vicenty()
 {
 	rb_mVicenty = rb_define_module("Vicenty");
-	rb_define_method(rb_mVicenty, "distance", distance, 6);
-	rb_define_method(rb_mVicenty, "point_from_lon_lat", point_from_lon_lat, 6);
+	rb_define_module_function(rb_mVicenty, "distance", distance, 6);
+	rb_define_module_function(rb_mVicenty, "point_from_lon_lat", point_from_lon_lat, 6);
 }
 
 // end
