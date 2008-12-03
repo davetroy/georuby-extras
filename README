@@ -7,9 +7,11 @@
 GeoRuby-Extras Gem for Ruby (c) 2008 David Troy
 dave@roundhousetech.com
 
+GeoRuby-Extras offers some native C enhancements and extras to the popular GeoRuby gem.
+
 GeoRuby offers OGC-compliant simple features for Ruby as well as the ability to
 process SHP files and do other cool GIS hacks.  GeoRuby is often used in conjunction
-with GIS extensions to databases.
+with GIS extensions for popular databases including Postgres and MySQL.
 
 == FEATURES/PROBLEMS:
 
