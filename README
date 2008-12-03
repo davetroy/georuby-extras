@@ -23,7 +23,6 @@ with GIS extensions for popular databases including Postgres and MySQL.
 == SYNOPSIS:
 
 require 'rubygems'
-require 'geo_ruby'
 require 'georuby-extras'
 
 include GeoRuby::SimpleFeatures
